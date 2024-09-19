@@ -132,14 +132,18 @@ def mission_complete(state) :
 
 if __name__=="__main__" :
     s = RoverState()
+
+    print("DFS for Mission Complete")
+    result2 = depth_first_search(s, action_list, mission_complete)
+    print(result2, '\n')
+
+    print("DLS with limit = 2 for Mission Complete")
+    result3 = depth_first_search(s, action_list, mission_complete, limit = 2)
+    print(result3, '\n')
+
     print("BFS for Mission Complete")
     resultBFS = breadth_first_search(s, action_list, mission_complete)
     print(resultBFS, '\n')
-    # result2 = depth_first_search(s, action_list, mission_complete)
-    # result3 = depth_first_search(s, action_list, mission_complete, limit = 2)
-    # print(result)
-    # print(result2)
-    # print(result3)
 
     print("BFS for moveToSample")
     moveToSampleBFS = breadth_first_search(s, action_list, sample_goal)

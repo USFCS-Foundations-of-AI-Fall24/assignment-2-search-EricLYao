@@ -1,3 +1,6 @@
 
 __pycache__/search_algorithms.cpython-312.pyc
 __pycache__/Graph.cpython-312.pyc
+__pycache__/mapcoloring.cpython-312.pyc
+__pycache__/mars_planner.cpython-312.pyc
+*.pyc
