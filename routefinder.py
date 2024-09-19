@@ -1,4 +1,6 @@
 from queue import PriorityQueue
+from Graph import *
+from math import *
 
 class map_state() :
     ## f = total estimated cost
@@ -34,9 +36,29 @@ class map_state() :
 
 def a_star(start_state, heuristic_fn, goal_test, use_closed_list=True) :
     search_queue = PriorityQueue()
-    closed_list = {}
+    closed_list = set()
     search_queue.put(start_state)
-    ## you do the rest.
+    num_states = 0
+
+    if use_closed_list : 
+        closed_list.add(start_state)
+
+    while not search_queue.empty():
+        current_state = search_queue.get()
+        num_states += 1
+        if goal_test(current_state):
+            print(num_states)
+            return current_state
+        edges = current_state.mars_graph.get_edges(current_state.location)
+        for edge in edges: 
+            curr_g = current_state.g + 1
+            new_state = map_state(location = edge.dest, mars_graph=current_state.mars_graph, prev_state = current_state, g = curr_g)
+            new_state.h = heuristic_fn(new_state)
+            if new_state in closed_list and use_closed_list:
+                continue
+            else:
+                closed_list.add(new_state)  # not in the closed list or use_closed_list is False
+                search_queue.put(new_state)
 
 
 ## default heuristic - we can use this to implement uniform cost search
@@ -45,9 +67,40 @@ def h1(state) :
 
 ## you do this - return the straight-line distance between the state and (1,1)
 def sld(state) :
-    sqt(a^ + b2)
+    x1, y1 = state.location.split(',')
+    return sqrt((int(x1) - 1)**2 + (int(y1) - 1)**2)
+
+def goal_test(state) :
+    return state.location == "1,1"
+    
 
 ## you implement this. Open the file filename, read in each line,
 ## construct a Graph object and assign it to self.mars_graph().
 def read_mars_graph(filename):
-    pass
+    graph = Graph()
+
+    with open(filename, 'r') as file:
+        for line in file:
+            # Splitting node and its neighbors
+            node, neighbors = line.split(':')
+            node = node.strip()
+            neighbor_nodes = neighbors.strip().split()
+
+            # Add the node to the graph
+            graph.add_node(node)
+
+            # Add edges for each neighbor
+            for neighbor in neighbor_nodes:
+                graph.add_edge(Edge(node, neighbor))
+
+    return graph
+
+if __name__=="__main__" :
+    my_mars_graph = read_mars_graph('marsdata.txt')
+    # for node, edges in my_mars_graph.g.items():
+    #     print(f"Node {node}:")
+    #     for edge in edges:
+    #         print(f"  {edge}")
+
+    my_m = map_state(location = '8,8', mars_graph=my_mars_graph)
+    my_a = a_star(my_m, sld, goal_test)
