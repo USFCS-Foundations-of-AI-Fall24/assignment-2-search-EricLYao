@@ -47,7 +47,7 @@ def a_star(start_state, heuristic_fn, goal_test, use_closed_list=True) :
         current_state = search_queue.get()
         num_states += 1
         if goal_test(current_state):
-            print(num_states)
+            print("Number of States:", num_states, "\n")
             return current_state
         edges = current_state.mars_graph.get_edges(current_state.location)
         for edge in edges: 
@@ -103,4 +103,8 @@ if __name__=="__main__" :
     #         print(f"  {edge}")
 
     my_m = map_state(location = '8,8', mars_graph=my_mars_graph)
+    print("A* for Question 3: ")
     my_a = a_star(my_m, sld, goal_test)
+
+    print("UCS for Question 3: ")
+    my_a = a_star(my_m, h1, goal_test)
